@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>
+	Drawing Tool
+	</title>
+	<link rel="icon" href="file:///Users/maya/Documents/dots-and-lines.png"></link>
+	<style>
+		body {
+			background-color: rgb(192,224,255);
+		}
+		h1 {
+			color: rgb(0,  0, 128);
+		}
+		#everything {
+			overflow: hidden;
+		}
+		#canvas {
+			float: right;
+		}
+		
+		#controls {
+			width: 200px;
+			float: left;
+		}
+		
+	</style>
+</head>
+<body>
+	<div id="everything">
+		<div id="canvas">
+			<canvas id="dottedCanvas">
+				Unfortunately, the drawing tool is not working. Trying with a different 
+				browser may resolve the problem.
+			</canvas>
+		</div>
+			<div text-align="left">
+				<input type="radio" id="makeNew" name="mode" value="makeNew" checked>
+				<label for="makeNew">Draw new lines</label>
+			</div>
+
+			<div>
+				<input type="radio" id="edit" name="mode" value="edit">
+				<label for="edit">Edit old lines</label>
+			</div>
+		<button onclick="undo();">
+		Undo</button>
+		<button onclick="
+		selectedNode = null;
+		lineArray = [];
+		redrawNoEvent();">
+		Clear</button>
+		<!--
+		<button onclick="
+		lineArray = examples[Math.floor(examples.length * Math.random())].slice(0);
+		redrawNoEvent();">
+		Show Example</button>
+		-->
+		<button onclick="
+		if (!animating) {
+			animating = true;
+			let i = 0;
+			let storer = lineArray;
+			lineArray = [];
+			let intervalID = setInterval(function() {
+				if (i < storer.length) {
+					lineArray.push(storer[i]);
+					redrawNoEvent();
+				} else {
+					clearInterval(intervalID);
+					animating = false;
+				};
+				i += 1;
+			}, 100)
+		}">
+		Animate</button>
+		<button type="button" onclick="randomLines();">Random Lines</button>
+		<button id="hide-dots" type="button" onclick="
+			dotsOn = ! dotsOn;
+			redrawNoEvent();
+			if (dotsOn) {
+				$('#hide-dots').text('Hide Dots');
+			} else {
+				$('#hide-dots').text('Show Dots');
+			}
+		">Hide Dots</button>
+		
+		<button onclick="
+		displayCode();">
+		Display Drawing Code</button>
+		
+		<input type="text" id="line-array-input" value="Enter drawing code here.">
+  		
+		<button type="button" onclick="
+		const input = document.getElementById('line-array-input').value; 
+		lineArray = JSON.parse(input);
+		redrawNoEvent();"> Go </button>
+		
+		<br>
+		
+		<label for="sliderHue">Hue:</label>
+		<input type="range" min="0" max="360" value="0" id="sliderHue"> 
+		<input type="text" value="0" size="3" id="textHue">
+		
+		<br>
+	
+		<label for="sliderSaturation">Saturation:</label>
+		<input type="range" min="0" max="100" value="0" id="sliderSaturation"> 
+		<input type="text" value="0" size="3" id="textSaturation">
+		
+		<br>
+	
+		<label for="sliderLightness">Lightness:</label>
+		<input type="range" min="0" max="100" value="0" id="sliderLightness"> 
+		<input type="text" value="0" size="3" id="textLightness">
+		
+		<br>
+	
+		<label for="sliderWidth">Line width:</label>
+		<input type="range" min="1" max="100" value="5" id="sliderWidth"> 
+		<input type="text" value="5" size="3" id="textWidth">
+		
+		<br>
+		
+		<label for="sliderSpacing">Spacing:</label>
+		<input type="range" min="5" max="100" value="20" id="sliderSpacing"> 
+		<input type="text" value="20" size="3" id="textSpacing">
+		
+		<div id="drawing-code"></div> 
+		
+		<div id="explanation">
+			<h2>Instructions</h2>
+			<p>To draw a new line, first click (and release) on the dot the line
+				starts from. Then, move your mouse to the place the line is
+				supposed to go to. Click. A line will be drawn with the current
+				hue, saturation, lightness, and line width attributes. To change
+				the hue, saturation, lightness, or line width select "edit old
+				lines". Click on one endpoint of the target, then click on the
+				other endpoint. The line should now be selected. Moving the hue,
+				saturation, lightness, or line width sliders should change the
+				respective attribute.</p>
+			<h2>Thanks</h2>
+			<p>When I started making this, I knew barely any HTML, CSS, or
+				JavaScript. I therefore owe many thanks to the websites and book
+				that helped me.</p>
+			<ul>
+				<li><a href="https://developer.mozilla.org/en-US/">
+					https://developer.mozilla.org/en-US/</a>, for more than I
+					can list</li>
+				<li>JavaScript for Kids: A Playful Introduction to Programming
+					by Nick Morgan, for teaching me basic HTML and CSS</li>
+				<li><a href="https://www.w3schools.com/">
+					https://www.w3schools.com/</a>, for many odds and ends</li>
+				<li><a href="https://stackoverflow.com/">
+					https://stackoverflow.com/</a>, for the answers to the
+					random questions I had that mysteriously didn't appear
+					anywhere else</li>
+				<li><a href="https://www.geeksforgeeks.org/">
+					https://www.geeksforgeeks.org/</a>, for the lifesaving
+					article that explained how to get user input without having
+					to use PHP</li>
+				<li><a href="https://www.khanacademy.org/">
+					https://www.khanacademy.org/</a>, for being my first
+					introduction to JavaScript</li>
+				<li><a href="https://www.codecademy.com/">
+					https://www.codecademy.com/</a>, for improving my
+					JavaScript</li>
+				<li>any that I am forgetting</li>
+				<li>the Google search engine, for helping me find all of the
+					above</li>
+				<li>my siblings, for messing around with my drawing tool and
+					reporting bugs</li>
+			</ul>	
+			<p>Please report bugs to <a href="mailto:6mrs37@gmail.com">6mrs37@gmail.com</a>. Note that this website is
+			subject to change without notice. If you are considering sueing me
+			over the content of this website, please remember that you have many
+			other better things to do with your time, money, and energy.</p>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+
+	<script src="all-together.js">
+	
+	</script>
+</body>
+</html>
